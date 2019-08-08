@@ -4,7 +4,7 @@
 
 namespace OrderCreator
 {
-    interface AbstractOrderLoader
+    interface IOrderLoader
     {
         void Log(string logMessage);
     }

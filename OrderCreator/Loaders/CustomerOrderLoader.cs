@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace OrderCreator
 {
-    public class CustomerOrderLoader : AbstractOrderLoader
+    public class CustomerOrderLoader : IOrderLoader
     {
         public CustomerOrder LoadCustomerOrder(XDocument customerOrderDocument)
         {
