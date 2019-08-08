@@ -64,4 +64,12 @@ namespace OrderCreator
         }
 
     }
+
+    public class OrderGoods
+    {
+        public string name;
+        public float price;
+        public int quantity;
+        public float sum;
+    }
 }

@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace OrderCreator
 {
-    class DeliveryOrderUnloader : AbstractOrderLoader
+    class DeliveryOrderUnloader : IOrderLoader
     {
         public XDocument CreateDeliveryOrders(CustomerOrder co)
         {

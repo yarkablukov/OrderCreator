@@ -3,22 +3,24 @@ using System.IO;
 using System.Xml.Linq;
 using System.Collections.Generic;
 using System.Xml.Schema;
+using System.Configuration;
+using NLog;
 
 namespace OrderCreator
 {
     class Program
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
         static void Main(string[] args)
         {
             // Папка, в которой будут лежать заказы клиентов на загрузку
-            string customerOrdersDirectory =
-                @"C:\Users\Slava\source\repos\OrderCreator\OrderCreator\bin\Debug\netcoreapp2.1\customer_orders";
+            string customerOrdersDirectory = ConfigurationManager.AppSettings["customer_orders_directory"];
             // Папка, в которую будут выгружаться ордера на доставку
-            string deliveryOrdersDirectory
-                = @"C:\Users\Slava\source\repos\OrderCreator\OrderCreator\bin\Debug\netcoreapp2.1\delivery_orders";
+            string deliveryOrdersDirectory = ConfigurationManager.AppSettings["delivery_orders_directory"];
             // Путь до схемы валидации заказа клиента
-            string xsdSchemaPath = @"C:\Users\Slava\source\repos\OrderCreator\CutomerOrderXMLSchema.xsd";
-            
+            string xsdSchemaPath = ConfigurationManager.AppSettings["xsdSchemaPath"];
+
+            logger.Info("info message");
 
             List<XDocument> statisticsDocuments = new List<XDocument>();
             DirectoryInfo customerOrdersDI = new DirectoryInfo(customerOrdersDirectory);
