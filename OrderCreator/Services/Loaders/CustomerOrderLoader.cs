@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
+using NLog;
 
 // Класс-загрузчик заказов клиентов
 
@@ -9,6 +10,14 @@ namespace OrderCreator
 {
     public class CustomerOrderLoader : IOrderLoader
     {
+        private readonly IReporter _reporter;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
+
+        public CustomerOrderLoader(IReporter reporter)
+        {
+            _reporter = reporter;
+        }
         public CustomerOrder LoadCustomerOrder(XDocument customerOrderDocument)
         {
             // изменение культурных настроек для корректной обработки float типов
@@ -34,44 +43,30 @@ namespace OrderCreator
                 orderGoodsList.Add(orderGoods);
             }
 
-            Console.WriteLine("Новый заказ");
-            Console.WriteLine("Имя клиента: {0}", customerOrder.getName());
-            Console.WriteLine("Адрес доставки: {0}", customerOrder.getAddress());
-            Console.WriteLine("Время доставки: {0}", customerOrder.getDeliveryTime());
-            Console.WriteLine("Комментарий к заказу: {0}", customerOrder.getComment());
-            Console.WriteLine("Спецификация заказа: ");
+            _reporter.Report("Новый заказ");
+            _reporter.Report("Имя клиента: " + customerOrder.getName());
+            _reporter.Report("Адрес доставки: " + customerOrder.getAddress());
+            _reporter.Report("Время доставки: " + customerOrder.getDeliveryTime());
+            _reporter.Report("Комментарий к заказу: " + customerOrder.getComment());
+            _reporter.Report("Спецификация заказа: ");
 
             int i = 0;
             foreach (OrderGoods orderGoods in customerOrder.getOrderGoodsList())
             {
                 i++;
-                Console.WriteLine();
-                Console.WriteLine("#" + i);
-                Console.WriteLine("Товар: {0}", orderGoods.name);
-                Console.WriteLine("Цена: {0}", orderGoods.price);
-                Console.WriteLine("Количество: {0}", orderGoods.quantity);
-                Console.WriteLine("Сумма заказа: {0}", orderGoods.sum);
+                _reporter.Report("");
+                _reporter.Report("#" + i);
+                _reporter.Report("Товар: " + orderGoods.name);
+                _reporter.Report("Цена: " + orderGoods.price);
+                _reporter.Report("Количество: " + orderGoods.quantity);
+                _reporter.Report("Сумма заказа: " + orderGoods.sum);
             }
-            Console.WriteLine();
+            _reporter.Report("");
+
+            logger.Info("New customer order loaded. Customer name: {0}, delivery time: {1}",
+                customerOrder.getName(), customerOrder.getDeliveryTime());
 
             return customerOrder;
-        }
-
-        public void Log(string fileName)
-        {
-            string writePath = @"C:\Users\Slava\source\repos\OrderCreator\OrderCreator\bin\Debug\netcoreapp2.1\logs\customer_orders_logs.txt";
-
-            try
-            {
-                using (StreamWriter sw = new StreamWriter(writePath, true, System.Text.Encoding.Default))
-                {
-                    sw.WriteLine("Обработан заказ клиента из файла: {0}, время: {1}", fileName, DateTime.Now);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Linq;
 
 // Интерфейс для Loader и Unloader.
 
@@ -6,6 +7,6 @@ namespace OrderCreator
 {
     interface IOrderLoader
     {
-        void Log(string logMessage);
+     //   T Load<T, V>(V input);
     }
 }

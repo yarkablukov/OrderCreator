@@ -12,30 +12,54 @@ namespace OrderCreator
         public readonly int totalOrdersAmountReport = 1;
         public readonly int totalOrdersSumReport = 2;
         public readonly int deliveryScheduleReport = 3;
+        private readonly IReporter reporter;
 
         List<XDocument> statisticsData;
 
-        public StatisticsMonitor(int reportType, List<XDocument> statisticsDocuments)
+        public StatisticsMonitor(int reportType, List<XDocument> statisticsDocuments, IReporter reporter)
         {
+            this.reporter = reporter;
             statisticsData = statisticsDocuments;
             if (reportType == totalOrdersAmountReport)
             {
                 int totalOrdersAmount = CountOrdersAmount();
-                Console.WriteLine("\nОбщее количество заказов: {0} \n", totalOrdersAmount);
+                reporter.Report("\nОбщее количество заказов: \n" + totalOrdersAmount);
             }
             if (reportType == totalOrdersSumReport)
             {
                 float totalOrdersSum = CountOrdersSum();
-                Console.WriteLine("\nОбщая сумма всех заказов: {0} \n", totalOrdersSum);
+                reporter.Report("\nОбщая сумма всех заказов: \n" + totalOrdersSum);
             }
             if (reportType == deliveryScheduleReport)
             {
                 Dictionary<String, String> deliverySchedule = DeliveryShedule();
                 foreach (var delivery in deliverySchedule.OrderBy(delivery => delivery.Value))
                 {
-                    Console.WriteLine("\nВремя доставки: {0}, Клиент: {1}\n", delivery.Value, delivery.Key);
+                    reporter.Report("\nВремя доставки: " + delivery.Value + ", Клиент: " + delivery.Key + "\n");
                 }
             }
+        }
+
+        public static void ShowStatistics (List<XDocument> documentslist, out bool isActive, IReporter reporter)
+        {
+            isActive = true;
+            reporter.Report("Выберите вариант отчета по заказам: \n" +
+                    "1. Общее количество заказов \n" +
+                    "2. Общая сумма всех заказов \n" +
+                    "3. График доставок на дату \n" +
+                    "4. Выход из приложения");
+
+            int statisticsReportType = Int32.Parse(Console.ReadLine());
+
+            if (statisticsReportType >= 1 && statisticsReportType <= 3)
+            {
+                StatisticsMonitor statisticsMonitor = new StatisticsMonitor(statisticsReportType, documentslist, reporter);
+            }
+            else if (statisticsReportType == 4)
+            {
+                isActive = false;
+            }
+            else { reporter.Report("Некорректный ввод, попробуйте еще раз"); }
         }
 
         public int CountOrdersAmount()

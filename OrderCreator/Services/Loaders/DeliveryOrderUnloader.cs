@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Xml.Linq;
+using NLog;
 
 // Класс, отвечающий за формирование ордеров на доставку на основании заказов клиентов
 
@@ -8,6 +9,7 @@ namespace OrderCreator
 {
     class DeliveryOrderUnloader : IOrderLoader
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
         public XDocument CreateDeliveryOrders(CustomerOrder co)
         {
                 DeliveryOrder deliveryOrder = new DeliveryOrder();
@@ -34,24 +36,12 @@ namespace OrderCreator
                         new XElement("good_sum", orderGoods.sum))
                         );
                 }
+
+            logger.Info("New delivery order is created. Customer name: {0}, delivery time: {1}",
+                deliveryOrder.getName(), deliveryOrder.getDeliveryTime());
+
             return xdoc;
         }
 
-        public void Log(string fileName)
-        {
-            string writePath = @"C:\Users\Slava\source\repos\OrderCreator\OrderCreator\bin\Debug\netcoreapp2.1\logs\delivery_orders_logs.txt";
-
-            try
-            {
-                using (StreamWriter sw = new StreamWriter(writePath, true, System.Text.Encoding.Default))
-                {
-                    sw.WriteLine("Создан ордер на отгрузку в файле: {0}, время: {1}", fileName, DateTime.Now);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-        }
     }
 }

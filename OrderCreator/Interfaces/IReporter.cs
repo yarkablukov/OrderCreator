@@ -4,7 +4,8 @@ using System.Text;
 
 namespace OrderCreator
 {
-    class NewClass
+    public interface IReporter
     {
+        void Report (string message);
     }
 }
