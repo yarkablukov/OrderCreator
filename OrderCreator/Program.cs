@@ -15,7 +15,7 @@ namespace OrderCreator
         static void Main(string[] args)
         {
             // Папка, в которой будут лежать заказы клиентов на загрузку
-            string customerOrdersDirectory = ConfigurationManager.AppSettings["customer_orders_directory"];
+            //string customerOrdersDirectory = ConfigurationManager.AppSettings["customer_orders_directory"];
             // Папка, в которую будут выгружаться ордера на доставку
             string deliveryOrdersDirectory = ConfigurationManager.AppSettings["delivery_orders_directory"];
             // Путь до схемы валидации заказа клиента
