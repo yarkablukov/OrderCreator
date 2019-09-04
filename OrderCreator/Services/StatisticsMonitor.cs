@@ -14,33 +14,33 @@ namespace OrderCreator
         public readonly int deliveryScheduleReport = 3;
         private readonly IReporter reporter;
 
-        List<XDocument> statisticsData;
+        XDocument[] statisticsData;
 
-        public StatisticsMonitor(int reportType, List<XDocument> statisticsDocuments, IReporter reporter)
+        public StatisticsMonitor(int reportType, XDocument[] statisticsDocuments, IReporter reporter)
         {
             this.reporter = reporter;
             statisticsData = statisticsDocuments;
             if (reportType == totalOrdersAmountReport)
             {
                 int totalOrdersAmount = CountOrdersAmount();
-                reporter.Report("\nОбщее количество заказов: \n" + totalOrdersAmount);
+                reporter.Report(String.Format("\nОбщее количество заказов: {0}\n", totalOrdersAmount));
             }
             if (reportType == totalOrdersSumReport)
             {
                 float totalOrdersSum = CountOrdersSum();
-                reporter.Report("\nОбщая сумма всех заказов: \n" + totalOrdersSum);
+                reporter.Report(String.Format("\nОбщая сумма всех заказов: {0}\n", totalOrdersSum));
             }
             if (reportType == deliveryScheduleReport)
             {
                 Dictionary<String, String> deliverySchedule = DeliveryShedule();
                 foreach (var delivery in deliverySchedule.OrderBy(delivery => delivery.Value))
                 {
-                    reporter.Report("\nВремя доставки: " + delivery.Value + ", Клиент: " + delivery.Key + "\n");
+                    reporter.Report(String.Format("\nВремя доставки: {0}, Клиент: {1}\n", delivery.Value, delivery.Key));
                 }
             }
         }
 
-        public static void ShowStatistics (List<XDocument> documentslist, out bool isActive, IReporter reporter)
+        public static void ShowStatistics (XDocument[] documentslist, out bool isActive, IReporter reporter)
         {
             isActive = true;
             reporter.Report("Выберите вариант отчета по заказам: \n" +

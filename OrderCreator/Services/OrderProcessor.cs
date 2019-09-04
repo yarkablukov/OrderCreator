@@ -15,7 +15,7 @@ namespace OrderCreator
         private readonly string xsdSchemaPath;
         private readonly string deliveryOrdersDirectory;
         private readonly IReporter reporter;
-        List<XDocument> statisticsDocuments = new List<XDocument>();
+        XDocument[] statisticsDocuments;
 
         public OrderProcessor(DirectoryInfo customerOrdersDI, string xsdSchemaPath, string deliveryOrdersDirectory, IReporter reporter)
         {
@@ -24,12 +24,12 @@ namespace OrderCreator
             this.deliveryOrdersDirectory = deliveryOrdersDirectory;
             this.reporter = reporter;
         }
-        public List<XDocument> Process()
+        public IEnumerable<XDocument> Process()
         {
             // проверка на наличие заказов клиентов
             if (customerOrdersDI.GetFiles().Length == 0)
             {
-                reporter.Report("В каталоге " + customerOrdersDI.FullName + " не найдено ни одного заказа клиента");
+                reporter.Report(String.Format("В каталоге {0} не найдено ни одного заказа клиента", customerOrdersDI.FullName));
                 Environment.Exit(0);
             }
 
@@ -57,9 +57,9 @@ namespace OrderCreator
                 i++;
 
                 // добавление документа в коллекцию для дальнейшего использования в отчетах
-                statisticsDocuments.Add(xDoc_in);
+                yield return xDoc_in;
             }
-            return statisticsDocuments;
+            
         }
         static void ValidationEventHandler(object sender, ValidationEventArgs e)
         {

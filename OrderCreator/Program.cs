@@ -6,6 +6,7 @@ using System.Xml.Schema;
 using System.Configuration;
 using NLog;
 using Unity;
+using System.Linq;
 
 namespace OrderCreator
 {
@@ -25,13 +26,13 @@ namespace OrderCreator
             
 
             //запуск OrderProcessor для загрузки заказов клиентов и формирования ордеров на доставку
-            var statisticsDocuments = new OrderProcessor(
+            XDocument[] statisticsDocuments = new OrderProcessor(
                 new DirectoryInfo(customerOrdersDirectory),
                 xsdSchemaPath,
                 deliveryOrdersDirectory,
-                //new Reporter()
-                container.Resolve<IReporter>()
-                ).Process();
+                container.Resolve<IReporter>())
+                .Process()
+                .ToArray();
                        
             // вывод разных вариантов отчетов по заказам клиентов
             bool isActive = true;

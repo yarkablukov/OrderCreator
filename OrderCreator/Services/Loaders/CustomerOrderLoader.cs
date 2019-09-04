@@ -44,22 +44,22 @@ namespace OrderCreator
             }
 
             _reporter.Report("Новый заказ");
-            _reporter.Report("Имя клиента: " + customerOrder.getName());
-            _reporter.Report("Адрес доставки: " + customerOrder.getAddress());
-            _reporter.Report("Время доставки: " + customerOrder.getDeliveryTime());
-            _reporter.Report("Комментарий к заказу: " + customerOrder.getComment());
-            _reporter.Report("Спецификация заказа: ");
+            _reporter.Report(String.Format("Имя клиента: {0}", customerOrder.getName()));
+            _reporter.Report(String.Format("Адрес доставки: {0}", customerOrder.getAddress()));
+            _reporter.Report(String.Format("Время доставки: {0}", customerOrder.getDeliveryTime()));
+            _reporter.Report(String.Format("Комментарий к заказу: {0}", customerOrder.getComment()));
+            _reporter.Report(String.Format("Спецификация заказа: "));
 
             int i = 0;
             foreach (OrderGoods orderGoods in customerOrder.getOrderGoodsList())
             {
                 i++;
                 _reporter.Report("");
-                _reporter.Report("#" + i);
-                _reporter.Report("Товар: " + orderGoods.name);
-                _reporter.Report("Цена: " + orderGoods.price);
-                _reporter.Report("Количество: " + orderGoods.quantity);
-                _reporter.Report("Сумма заказа: " + orderGoods.sum);
+                _reporter.Report(String.Format("#{0}", i));
+                _reporter.Report(String.Format("Товар: {0}", orderGoods.name));
+                _reporter.Report(String.Format("Цена: {0}", orderGoods.price));
+                _reporter.Report(String.Format("Количество: {0}", orderGoods.quantity));
+                _reporter.Report(String.Format("Сумма заказа: {0}", orderGoods.sum));
             }
             _reporter.Report("");
 
